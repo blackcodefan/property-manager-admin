@@ -21,13 +21,13 @@ class BuildingController
     }
 
     public function index(){
-        $where_clause = '';
+        $where_clause = " WHERE {$this->table}.user_id=%d";
         if (isset($_GET['property_id']) && $_GET['property_id'] != ''){
-            $where_clause = " WHERE {$this->table}.property_id={$_GET['property_id']}";
+            $where_clause = " AND {$this->table}.property_id={$_GET['property_id']}";
         }
         $results = $this->db->get_results(
             $this->db->prepare(
-                "SELECT {$this->table}.*, {$this->property_table}.name as property_name, COUNT({$this->video_table}.id) as videos FROM  {$this->table} LEFT JOIN {$this->video_table} ON {$this->table}.id={$this->video_table}.building_id AND {$this->table}.user_id=%d LEFT JOIN {$this->property_table} ON {$this->table}.property_id={$this->property_table}.id{$where_clause} GROUP BY {$this->table}.id;", $this->current_user->ID)
+                "SELECT {$this->table}.*, {$this->property_table}.name as property_name, COUNT({$this->video_table}.id) as videos FROM  {$this->table} LEFT JOIN {$this->video_table} ON {$this->table}.id={$this->video_table}.building_id LEFT JOIN {$this->property_table} ON {$this->table}.property_id={$this->property_table}.id{$where_clause} GROUP BY {$this->table}.id;", $this->current_user->ID)
         );
 
         return $results;
