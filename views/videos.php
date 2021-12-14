@@ -23,60 +23,34 @@
     </form>
     <a href="<?php echo esc_url( admin_url( 'admin.php?page=videos&status=publish' ) ); ?>">Active (<?php echo $active[0]->counts;?>)</a> |
     <a href="<?php echo esc_url( admin_url( 'admin.php?page=videos&status=trash' ) ); ?>">Trashed (<?php echo $trashed[0]->counts;?>)</a>
-    <table class="widefat fixed" cellspacing="0">
+    <table class="jsmartable table wp-list-table widefat" cellspacing="0">
         <thead>
         <tr>
-            <th class="manage-column" scope="col">ID</th>
-            <th class="manage-column column-title column-primary" scope="col">Youtube</th>
-            <th class="manage-column" scope="col">Vimeo</th>
-            <th class="manage-column" scope="col">Wistia</th>
-            <th class="manage-column" scope="col">Building</th>
-            <th class="manage-column" scope="col">Address</th>
-            <th class="manage-column" scope="col">Property</th>
-            <th class="manage-column" scope="col">Description</th>
-            <th class="manage-column" scope="col">Unit Floor</th>
-            <th class="manage-column" scope="col">Unit</th>
-            <th class="manage-column" scope="col">Bedroom</th>
-            <th class="manage-column" scope="col">Bathroom</th>
-            <th class="manage-column" scope="col">Type</th>
-            <th class="manage-column" scope="col">Line Start</th>
-            <th class="manage-column" scope="col">Line End</th>
-            <th class="manage-column" scope="col">Create At</th>
-            <th class="manage-column" scope="col">Update At</th>
+            <th>ID</th>
+            <th>Address</th>
+            <th>Description</th>
+            <th data-breakpoint="xs">Building</th>
+            <th data-breakpoint="xs">Property</th>
+            <th data-breakpoint="lg">Unit Floor</th>
+            <th data-breakpoint="lg">Unit</th>
+            <th data-breakpoint="lg">Bedroom</th>
+            <th data-breakpoint="lg">Bathroom</th>
+            <th data-breakpoint="lg">Type</th>
+            <th data-breakpoint="lg">Line Start</th>
+            <th data-breakpoint="lg">Line End</th>
+            <th class="video" data-breakpoint="xlg">Youtube</th>
+            <th class="video" data-breakpoint="xlg">Vimeo</th>
+            <th class="video" data-breakpoint="xlg">Wistia</th>
+            <th data-breakpoint="xlg">Create At</th>
+            <th data-breakpoint="xlg">Update At</th>
         </tr>
         </thead>
-        <tfoot>
-        <tr>
-            <th class="manage-column" scope="col">ID</th>
-            <th class="manage-column column-title column-primary" scope="col">Youtube</th>
-            <th class="manage-column" scope="col">Vimeo</th>
-            <th class="manage-column" scope="col">Wistia</th>
-            <th class="manage-column" scope="col">Building</th>
-            <th class="manage-column" scope="col">Address</th>
-            <th class="manage-column" scope="col">Property</th>
-            <th class="manage-column" scope="col">Description</th>
-            <th class="manage-column" scope="col">Unit Floor</th>
-            <th class="manage-column" scope="col">Unit</th>
-            <th class="manage-column" scope="col">Bedroom</th>
-            <th class="manage-column" scope="col">Bathroom</th>
-            <th class="manage-column" scope="col">Type</th>
-            <th class="manage-column" scope="col">Line Start</th>
-            <th class="manage-column" scope="col">Line End</th>
-            <th class="manage-column" scope="col">Create At</th>
-            <th class="manage-column" scope="col">Update At</th>
-        </tr>
-        </tfoot>
         <tbody>
         <?php for ($i = 0; $i < count($videos); $i++){?>
             <tr class="<?php if($i%2 != 0) echo "alternate";?>" data-score="<?php echo $videos[$i]->id; ?>">
-                <th scope="row"><?php echo $videos[$i]->id; ?></th>
-                <td><a target="_blank" href="<?php echo $videos[$i]-> youtube;?>"><?php echo $videos[$i]-> youtube;?></a></td>
-                <td><a target="_blank" href="<?php echo $videos[$i]-> vimeo;?>"><?php echo $videos[$i]-> vimeo;?></a></td>
-                <td><a target="_blank" href="<?php echo $videos[$i]-> wistia;?>"><?php echo $videos[$i]-> wistia;?></a></td>
-                <td><?php echo $videos[$i]-> building_name;?></td>
+                <td><?php echo $videos[$i]->id; ?></td>
                 <td><?php echo $videos[$i]-> address;?></td>
-                <td><?php echo $videos[$i]-> property_name;?></td>
-                <td class="column-title has-row-actions column-primary">
+                <td>
                     <?php echo $videos[$i]-> description;?>
                     <div class="row-actions">
                         <span><a href="<?php echo esc_url( admin_url( 'admin.php?page=edit-video&id='.$videos[$i]->id ) ); ?>">Edit</a> |</span>
@@ -87,13 +61,18 @@
                         <?php } ?>
                     </div>
                 </td>
+                <td><?php echo $videos[$i]-> building_name;?></td>
+                <td><?php echo $videos[$i]-> property_name;?></td>
                 <td><?php echo $videos[$i]-> unitf;?></td>
                 <td><?php echo $videos[$i]-> unit;?></td>
                 <td><?php echo $videos[$i]-> bedroom;?></td>
                 <td><?php echo $videos[$i]-> bathroom;?></td>
-                <td><?php if($videos[$i]-> apartrange) echo 'Line video'; else echo 'Unique Apartment';?></td>
+                <td><?php if($videos[$i]-> apartrange) echo 'Line'; else echo 'Unique';?></td>
                 <td><?php echo $videos[$i]-> apartmin;?></td>
                 <td><?php echo $videos[$i]-> apartmax;?></td>
+                <td class="video"><a target="_blank" href="<?php echo $videos[$i]-> youtube;?>"><?php echo $videos[$i]-> youtube;?></a></td>
+                <td class="video"><a target="_blank" href="<?php echo $videos[$i]-> vimeo;?>"><?php echo $videos[$i]-> vimeo;?></a></td>
+                <td class="video"><a target="_blank" href="<?php echo $videos[$i]-> wistia;?>"><?php echo $videos[$i]-> wistia;?></a></td>
                 <td><?php echo $videos[$i]-> created_at;?></td>
                 <td><?php echo $videos[$i]-> updated_at;?></td>
             </tr>

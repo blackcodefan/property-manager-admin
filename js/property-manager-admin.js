@@ -40,6 +40,14 @@ jQuery(function () {
             return alert("Invalid Wistia URL.");
         }
     });
+
+    jQuery('.jsmartable').jsmartable({breakpoint: {
+            xs: 480,
+            sm: 768,
+            md: 1024,
+            lg: 1500,
+            xlg: 2500,
+        }});
 });
 
 function trashProperty(property_id) {

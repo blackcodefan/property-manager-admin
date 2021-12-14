@@ -50,7 +50,7 @@ class Activator
                           wistia varchar (255),
                           description varchar (255),
                           unitf varchar (255),
-                          unit int,
+                          unit varchar (255),
                           bedroom int,
                           bathroom decimal,
                           apartrange BOOL default 0,

@@ -11,17 +11,17 @@
                 <?php } ?>
             </select>
         </div>
-        <div class="row">
+        <div class="c-row">
             <div class="options">
                 <p><label for="unit_floor">Unit Floor:</label></p>
                 <input type="text" name="unit_floor" required id="unit_floor"/>
             </div>
             <div class="options">
                 <p><label for="unit">Unit # :</label></p>
-                <input type="number" name="unit" required id="unit"/>
+                <input type="text" name="unit" required id="unit"/>
             </div>
         </div>
-        <div class="row">
+        <div class="c-row">
             <div class="options">
                 <p><label for="bedroom">Bedrooms:</label></p>
                 <select name="bedroom" required id="bedroom">

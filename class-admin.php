@@ -81,6 +81,8 @@ class Admin {
 	 */
 	public function enqueue_styles() {
 
+        wp_enqueue_style( 'bootstrap-css', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/property-manager-admin.css', array(), $this->version, 'all' );
 
 	}
@@ -93,7 +95,10 @@ class Admin {
 	public function enqueue_scripts() {
 		
 		$params = array ( 'ajaxurl' => admin_url( 'admin-ajax.php' ) );
-		wp_enqueue_script( 'pma_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/property-manager-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'popover', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( 'jsmartable', plugin_dir_url( __FILE__ ) . 'js/jsmartable.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( 'pma_js', plugin_dir_url( __FILE__ ) . 'js/property-manager-admin.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( 'pma_ajax_handle', 'params', $params );
 
 	}

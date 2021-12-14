@@ -23,7 +23,7 @@ class BuildingController
     public function index(){
         $where_clause = " WHERE {$this->table}.user_id=%d";
         if (isset($_GET['property_id']) && $_GET['property_id'] != ''){
-            $where_clause = " AND {$this->table}.property_id={$_GET['property_id']}";
+            $where_clause .= " AND {$this->table}.property_id={$_GET['property_id']}";
         }
         $results = $this->db->get_results(
             $this->db->prepare(

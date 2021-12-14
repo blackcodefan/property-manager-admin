@@ -1,7 +1,17 @@
-.row{
+.c-row{
     display: flex;
     gap: 10px;
 }
 #description{
     min-width: 350px
+}
+
+/*videos table responsive style*/
+.row-id{
+    width: 20px;
+}
+
+.jsmartable-subcol a{
+    max-width: 100px;
+    word-break: break-all;
 }
