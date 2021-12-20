@@ -34,6 +34,7 @@ class Activator
                           user_id int,
                           name varchar (255),
                           address varchar (255),
+                          listing_order BOOL default 0,
                           created_at TIMESTAMP default current_timestamp,
                           updated_at TIMESTAMP default current_timestamp
                           ) $collate;";
@@ -45,12 +46,15 @@ class Activator
                           property_id int,
                           building_id int,
                           user_id int,
+                          label varchar (255),
                           youtube varchar (255),
                           vimeo varchar (255),
                           wistia varchar (255),
                           description varchar (255),
                           unitf varchar (255),
+                          unitfn int,
                           unit varchar (255),
+                          unitn int,
                           bedroom int,
                           bathroom decimal,
                           apartrange BOOL default 0,

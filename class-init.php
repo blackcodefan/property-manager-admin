@@ -96,6 +96,8 @@ class Init {
 
         $this->loader->add_action( 'admin_post_redirect_hook', $plugin_admin, 'redirect_hook');
 
+        $this->loader->add_action('admin_post_set_video_setting', $plugin_admin, 'save_video_scree_option');
+
         //when a form is submitted to admin-ajax.php
         $this->loader->add_action( 'wp_ajax_property_request_handler', $plugin_admin, 'property_ajax_handler');
 
@@ -103,6 +105,8 @@ class Init {
 
         // Register admin notices
         $this->loader->add_action( 'admin_notices', $plugin_admin, 'print_plugin_admin_notices');
+
+        $this->loader->add_filter('screen_settings', $plugin_admin, 'print_settings_collapse');
     }
 
     private function register_rest_api(){

@@ -40,7 +40,27 @@ class Api
         if($this->current_user->exists()) {
             $results = $this->db->get_results(
                 $this->db->prepare(
-                    "SELECT {$this->video_table}.*, {$this->property_table}.name as property_name, {$this->building_table}.name as building_name, {$this->building_table}.address as address FROM  {$this->video_table} LEFT JOIN {$this->property_table} ON {$this->video_table}.property_id={$this->property_table}.id LEFT JOIN {$this->building_table} ON {$this->video_table}.building_id={$this->building_table}.id WHERE {$this->video_table}.user_id=%d AND {$this->video_table}.status='publish';", $this->current_user->ID)
+                    "SELECT {$this->video_table}.*,
+                                  {$this->property_table}.name as property_name,
+                                  {$this->building_table}.name as building_name,
+                                  {$this->building_table}.listing_order,
+                                  {$this->building_table}.address as address 
+                           FROM  {$this->video_table} 
+                           LEFT JOIN {$this->property_table}
+                           ON {$this->video_table}.property_id={$this->property_table}.id
+                           LEFT JOIN {$this->building_table}
+                           ON {$this->video_table}.building_id={$this->building_table}.id
+                           WHERE {$this->video_table}.user_id=%d
+                           AND {$this->video_table}.status='publish'
+                           ORDER BY {$this->video_table}.unitfn IS NULL, {$this->video_table}.unitfn,
+                                {$this->video_table}.unitf IS NULL, {$this->video_table}.unitf,
+                                {$this->video_table}.unitn IS NULL, {$this->video_table}.unitn,
+                                {$this->video_table}.unit IS NULL, {$this->video_table}.unit,
+                                {$this->video_table}.apartmin,
+                                {$this->video_table}.apartmax,
+                                {$this->video_table}.label
+                           ;",
+                    $this->current_user->ID)
             );
             return ['success' => true, 'videos' => $results];
         }else{

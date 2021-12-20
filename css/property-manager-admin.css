@@ -6,6 +6,14 @@
     min-width: 350px
 }
 
+.label{
+    margin-top: 10px;
+}
+
+.hidden{
+    display: none !important;
+}
+
 /*videos table responsive style*/
 .row-id{
     width: 20px;

@@ -23,7 +23,13 @@ class PropertyController
         $where_clause = " WHERE {$this->table}.status='{$status}' AND {$this->table}.user_id=%d";
         $results = $this->db->get_results(
             $this->db->prepare(
-                "SELECT {$this->table}.*, COUNT({$this->building_table}.id) as buildings FROM  {$this->table} LEFT JOIN {$this->building_table} ON {$this->table}.id={$this->building_table}.property_id{$where_clause} GROUP BY {$this->table}.id;", $this->current_user->ID)
+                "SELECT {$this->table}.*,
+                              COUNT({$this->building_table}.id) as buildings
+                       FROM  {$this->table}
+                       LEFT JOIN {$this->building_table}
+                       ON {$this->table}.id={$this->building_table}.property_id{$where_clause}
+                       GROUP BY {$this->table}.id;",
+                $this->current_user->ID)
         );
 
         return $results;
@@ -44,7 +50,11 @@ class PropertyController
     public function count($status){
         return $this->db->get_results(
             $this->db->prepare(
-                "SELECT COUNT('id') as counts FROM  {$this->table} WHERE user_id=%d AND status='{$status}';", $this->current_user->ID)
+                "SELECT COUNT('id') as counts 
+                      FROM  {$this->table}
+                      WHERE user_id=%d
+                      AND status='{$status}';", 
+                $this->current_user->ID)
         );
     }
 
@@ -57,7 +67,14 @@ class PropertyController
                 ]
             );
         else{
-            return $this->db->update($this->table, ['name' => $property_name, 'updated_at' => date('Y-m-d h-i-s')], ['id' => $property_id]);
+            return $this->db->update($this->table, 
+                [
+                    'name' => $property_name, 
+                    'updated_at' => date('Y-m-d h-i-s')
+                ], 
+                [
+                    'id' => $property_id
+                ]);
         }
     }
 }

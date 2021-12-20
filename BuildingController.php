@@ -27,7 +27,17 @@ class BuildingController
         }
         $results = $this->db->get_results(
             $this->db->prepare(
-                "SELECT {$this->table}.*, {$this->property_table}.name as property_name, COUNT({$this->video_table}.id) as videos FROM  {$this->table} LEFT JOIN {$this->video_table} ON {$this->table}.id={$this->video_table}.building_id LEFT JOIN {$this->property_table} ON {$this->table}.property_id={$this->property_table}.id{$where_clause} GROUP BY {$this->table}.id;", $this->current_user->ID)
+                "SELECT {$this->table}.*, 
+                              {$this->property_table}.name as property_name, 
+                              COUNT({$this->video_table}.id) as videos 
+                       FROM  {$this->table} 
+                       LEFT JOIN {$this->video_table} 
+                       ON {$this->table}.id={$this->video_table}.building_id 
+                       LEFT JOIN {$this->property_table} 
+                       ON {$this->table}.property_id={$this->property_table}.id
+                       {$where_clause}
+                       GROUP BY {$this->table}.id;",
+                $this->current_user->ID)
         );
 
         return $results;

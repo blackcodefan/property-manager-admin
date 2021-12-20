@@ -1,29 +1,39 @@
-<div class=\'wrap\'>
-    <h2><?php echo esc_html(get_admin_page_title())?></h2>
-    <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="add-video-form">
+<div class='wrap'>
+    <h2><?php echo esc_html(get_admin_page_title()) ?></h2>
+    <form method="post"
+          action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
+          id="add-video-form">
         <input type="hidden" name="action" value="save_video_hook"/>
         <div class="options">
-            <p><label for="building">Building:</label></p>
+            <div class="label">
+                <label for="building">Building:</label>
+            </div>
             <select required name="building_id" id="building">
                 <option value="">Select a Building</option>
-                <?php foreach ($buildings as $building){?>
-                    <option value="<?php echo $building->id;?>"><?php echo $building->property_name.'-'.$building->name; ?></option>
+                <?php foreach ($buildings as $building) { ?>
+                    <option value="<?php echo $building->id; ?>"><?php echo $building->property_name . '-' . $building->name; ?></option>
                 <?php } ?>
             </select>
         </div>
         <div class="c-row">
             <div class="options">
-                <p><label for="unit_floor">Unit Floor:</label></p>
+                <div class="label">
+                    <label for="unit_floor">Unit Floor:</label>
+                </div>
                 <input type="text" name="unit_floor" required id="unit_floor"/>
             </div>
             <div class="options">
-                <p><label for="unit">Unit # :</label></p>
+                <div class="label">
+                    <label for="unit">Unit # :</label>
+                </div>
                 <input type="text" name="unit" required id="unit"/>
             </div>
         </div>
         <div class="c-row">
             <div class="options">
-                <p><label for="bedroom">Bedrooms:</label></p>
+                <div class="label">
+                    <label for="bedroom">Bedrooms:</label>
+                </div>
                 <select name="bedroom" required id="bedroom">
                     <option value="0">0</option>
                     <option value="1">1</option>
@@ -34,7 +44,9 @@
                 </select>
             </div>
             <div class="options">
-                <p><label for="bathroom">Bathrooms:</label></p>
+                <div class="label">
+                    <label for="bathroom">Bathrooms:</label>
+                </div>
                 <select name="bathroom" required id="bathroom">
                     <option value="1">1</option>
                     <option value="1.5">1.5</option>
@@ -47,34 +59,52 @@
             </div>
         </div>
         <div class="options" id="radio-box">
-            <p><label for="apart_type">Is this a line video or a unique apartment video?</label></p>
+            <div class="label">
+                <label for="apart_type">Is this a line video or a unique apartment video?</label>
+            </div>
             <fieldset>
-                <label><input type="radio" name="apartment-type-radio" value="true">
-                    Yes
+                <label>
+                    <input type="radio" name="apartment-type-radio" value="true"/>
+                    Line video
                 </label>
-                <label><input type="radio" name="apartment-type-radio" value="false" checked>
-                    No
+                <label>
+                    <input type="radio" name="apartment-type-radio" value="false" checked/>
+                    Unique apartment
                 </label><br>
             </fieldset>
         </div>
         <div class="options">
-            <p><label for="description">Description</label></p>
+            <div class="label">
+                <label for="label">Extra Label</label>
+            </div>
+            <input type="text" name="label" id="label"/>
+        </div>
+        <div class="options">
+            <div class="label">
+                <label for="description">Description</label>
+            </div>
             <textarea type="text" name="description" required id="description"></textarea>
         </div>
         <div class="options">
-            <p><label for="youtube">Youtube URL:</label></p>
+            <div class="label">
+                <label for="youtube">Youtube URL:</label>
+            </div>
             <input type="text" name="youtube" id="youtube"/>
         </div>
         <div class="options">
-            <p><label for="vimeo">Vimeo URL:</label></p>
+            <div class="label">
+                <label for="vimeo">Vimeo URL:</label>
+            </div>
             <input type="text" name="vimeo" id="vimeo"/>
         </div>
         <div class="options">
-            <p><label for="wistia">Wistia URL:</label></p>
+            <div class="label">
+                <label for="wistia">Wistia URL:</label>
+            </div>
             <input type="text" name="wistia" id="wistia"/>
         </div>
         <?php
-        wp_nonce_field( 'video_save_nonce', 'video_save_nonce' );
+        wp_nonce_field('video_save_nonce', 'video_save_nonce');
         submit_button('Add a Video');
         ?>
     </form>

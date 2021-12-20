@@ -5,6 +5,7 @@ namespace PROPERTY_MANAGER_ADMIN;
 include 'PropertyController.php';
 include 'BuildingController.php';
 include 'VideoController.php';
+include 'SettingController.php';
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -64,6 +65,14 @@ class Admin {
 
 	private $video_controller;
 
+	/** SettingController */
+
+	private $setting_controller;
+
+	private $videos_page_id;
+
+	private $videos_setting;
+
 	public function __construct( $plugin_name, $version, $plugin_text_domain ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
@@ -72,6 +81,7 @@ class Admin {
 		$this->property_controller = new PropertyController();
 		$this->building_controller = new BuildingController();
 		$this->video_controller = new VideoController();
+		$this->setting_controller = new SettingController();
 	}
 
 	/**
@@ -170,7 +180,7 @@ class Admin {
             array( $this, 'building_edit_page_content' )
         );
 
-        add_submenu_page(
+        $this->videos_page_id = add_submenu_page(
             $this->plugin_name,
             __( 'Videos', $this->plugin_text_domain ),
             __( 'Videos', $this->plugin_text_domain ),
@@ -196,6 +206,9 @@ class Admin {
             'edit-video',
             array( $this, 'video_edit_page_content' )
         );
+
+        // Add video list page load callback to add column options
+        add_action('load-'.$this->videos_page_id, [$this, 'add_video_screen_options']);
 
 	}
 
@@ -242,11 +255,17 @@ class Admin {
         if (isset($_GET['status']) && $_GET['status'] == 'trash'){
             $status = 'trash';
         }
+
+        $orderBy = 'address';
+        $order = !empty($_GET['order']) ? 'asc' : 'desc';
+        if (!empty($_GET['orderby'])) $orderBy = $_GET['orderby'];
+
         $trashed = $this->video_controller->count('trash');
         $active = $this->video_controller->count('publish');
 
-	    $videos = $this->video_controller->index($status);
+	    $videos = $this->video_controller->index($status, $orderBy, $order);
         $buildings = $this->building_controller->index();
+
 	    include_once('views/videos.php');
     }
 
@@ -259,6 +278,34 @@ class Admin {
         $buildings = $this->building_controller->index();
 	    $video = $this->video_controller->get($_GET['id']);
 	    include_once('views/edit-video.php');
+    }
+
+    // Add column options to video list page
+    public function add_video_screen_options(){
+        add_screen_option('pma_v_address', ['id' => 'pma_v_address', 'label' => 'Address', 'value' => true]);
+        add_screen_option('pma_v_description', ['id' => 'pma_v_description', 'label' => 'Description', 'value' => true]);
+        add_screen_option('pma_v_building', ['id' => 'pma_v_building', 'label' => 'Building', 'value' => true]);
+        add_screen_option('pma_v_property', ['id' =>'pma_v_property', 'label' => 'Property', 'value' => true]);
+        add_screen_option('pma_v_label', ['id' =>'pma_v_label', 'label' => 'Label', 'value' => true]);
+        add_screen_option('pma_v_bedroom', ['id' =>'pma_v_bedroom', 'label' => 'Bedroom', 'value' => true]);
+        add_screen_option('pma_v_bathroom', ['id' =>'pma_v_bathroom', 'label' => 'Bathroom', 'value' => true]);
+        add_screen_option('pma_v_type', ['id' =>'pma_v_type', 'label' => 'Type', 'value' => false]);
+        add_screen_option('pma_v_min', ['id' =>'pma_v_min', 'label' => 'Line Start', 'value' => false]);
+        add_screen_option('pma_v_max', ['id' =>'pma_v_max', 'label' => 'Line End', 'value' => false]);
+    }
+
+    // Include screen option
+    public function print_settings_collapse(){
+        $screen = get_current_screen();
+        if ($screen->id == $this->videos_page_id)
+            $this->show_videos_page_settings();
+    }
+
+    private function show_videos_page_settings(){
+	    $screen = get_current_screen();
+	    $options = $screen->get_options();
+	    $this->videos_setting = $this->setting_controller->getVideosSetting();
+        include_once( 'views/videos-setting.php' );
     }
 
     public function redirect_hook(){
@@ -360,6 +407,7 @@ class Admin {
             $building['property_id'] = sanitize_text_field($_POST['property_id']);
             $building['name'] = sanitize_text_field($_POST['name']);
             $building['address'] = sanitize_text_field($_POST['address']);
+            $building['listing_order'] = $_POST['listing_order'] == 'true' ? 1 : 0; // true if line video first
             $building_id = sanitize_text_field($_POST['building_id']);
 
             if ($this->building_controller->save($building, $building_id)){
@@ -392,14 +440,29 @@ class Admin {
             $video['vimeo'] = $_POST['vimeo'];
             $video['wistia'] = $_POST['wistia'];
             $video['description'] = $_POST['description'];
-            $video['unitf'] = $_POST['unit_floor'];
-            $video['unit'] = $_POST['unit'];
             $video['bedroom'] = $_POST['bedroom'];
             $video['bathroom'] = $_POST['bathroom'];
-            $video['apartrange'] = isset($_POST['apartment-type-radio']) && $_POST['apartment-type-radio'] == 'true'?1:0;
+            $video['apartrange'] = $_POST['apartment-type-radio'] == 'true'?1:0;
             $video['apartmin'] = $_POST['min'];
             $video['apartmax'] = $_POST['max'];
             $video['status'] = 'publish';
+            $video['label'] = $_POST['label'];
+
+            if (is_numeric($_POST['unit_floor'])){
+                $video['unitfn'] = $_POST['unit_floor'];
+                $video['unitf'] = null;
+            }else{
+                $video['unitfn'] = null;
+                $video['unitf'] = $_POST['unit_floor'];
+            }
+
+            if (is_numeric($_POST['unit'])){
+                $video['unitn'] = (int) $_POST['unit'];
+                $video['unit'] = null;
+            }else{
+                $video['unit'] = $_POST['unit'];
+                $video['unitn'] = null;
+            }
 
             $video_id = sanitize_text_field($_POST['video_id']);
 
@@ -427,6 +490,22 @@ class Admin {
         }
     }
 
+    public function save_video_scree_option(){
+        if( isset( $_POST['setting_hook_nonce'] ) && wp_verify_nonce( $_POST['setting_hook_nonce'], 'setting_hook_nonce') ){
+
+            $this->setting_controller->setVideosSetting($_POST);
+
+            wp_redirect(admin_url('admin.php?page=videos'));
+            exit;
+        }else{
+            wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
+                'response' 	=> 403,
+                'back_link' => 'admin.php?page=' . $this->plugin_name,
+
+            ) );
+        }
+    }
+
 	/**
 	 * Redirect
 	 * 
@@ -441,7 +520,6 @@ class Admin {
 					) ) );
 
 	}
-
 
 	/**
 	 * Print Admin Notices
@@ -459,5 +537,47 @@ class Admin {
 
 	}
 
+	public function sortable_column_class_generator($field){
+        $orderBy = 'address';
+        $order = !empty($_GET['order']);
+        if (!empty($_GET['orderby'])) $orderBy = $_GET['orderby'];
 
+        $class_name = '';
+        $orderBy == $field ? $class_name.='sorted' : $class_name.='sortable';
+        $orderBy == 'address' && $order ?$class_name.=' asc' : $class_name.=' desc';
+
+        return $class_name;
+    }
+
+    public function video_page_sort_url_generator($field){
+        $orderBy = 'address';
+        $order = !empty($_GET['order']);
+        if (!empty($_GET['orderby'])) $orderBy = $_GET['orderby'];
+
+        $status_clause = "";
+        if (!empty($_GET['status']) && $_GET['status'] == 'trash'){
+            $status_clause .= "&status=trash";
+        }
+
+        return esc_url(
+            admin_url("admin.php?page=videos{$status_clause}&orderby={$field}&order="
+                .($orderBy != $field || !$order)
+            ));
+    }
+
+    public function get_option_value($field){
+        $screen = get_current_screen();
+        $options = $screen->get_options();
+        return $options[$field]['value'];
+    }
+
+    public function is_hidden($field){
+	    if(isset($this->videos_setting["pma_v_{$field}"])) {
+	        if (empty($this->videos_setting["pma_v_{$field}"][0])){
+	            return ' hidden';
+            }
+            return '';
+        }
+	    return '';
+    }
 }

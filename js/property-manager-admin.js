@@ -22,6 +22,16 @@ jQuery(function () {
         let youtube = jQuery("#youtube").val();
         let vimeo = jQuery("#vimeo").val();
         let wistia = jQuery("#wistia").val();
+        let unit = jQuery('#unit').val();
+        let unitf = jQuery('#unit_floor').val();
+        if(!unitf.match(/^[A-Za-z]+$/) && !unitf.match(/^[0-9]+$/)){
+            event.preventDefault();
+            return alert('Unit Floor should be only numeric or alphabetical characters');
+        }
+        if(!unit.match(/^[A-Za-z]+$/) && !unit.match(/^[0-9]+$/)){
+            event.preventDefault();
+            return alert('Unit should be only numeric or alphabetical characters');
+        }
         if (!youtube && !vimeo && !wistia) {
             event.preventDefault();
             return alert("Enter one video url.");
@@ -48,6 +58,20 @@ jQuery(function () {
             lg: 1500,
             xlg: 2500,
         }});
+
+    jQuery('#unit').change(function () {
+        let value = jQuery(this).val();
+        if(!value.match(/^[A-Za-z]+$/) && !value.match(/^[0-9]+$/)){
+            alert('Unit should be only numeric or alphabetical characters');
+        }
+    });
+
+    jQuery('#unit_floor').change(function () {
+        let value = jQuery(this).val();
+        if(!value.match(/^[A-Za-z]+$/) && !value.match(/^[0-9]+$/)){
+            alert('Unit Floor should be only numeric or alphabetical characters');
+        }
+    });
 });
 
 function trashProperty(property_id) {
