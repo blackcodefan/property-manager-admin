@@ -52,7 +52,8 @@ class Api
                            ON {$this->video_table}.building_id={$this->building_table}.id
                            WHERE {$this->video_table}.user_id=%d
                            AND {$this->video_table}.status='publish'
-                           ORDER BY {$this->video_table}.unitfn IS NULL, {$this->video_table}.unitfn,
+                           ORDER BY {$this->building_table}.name, 
+                                {$this->video_table}.unitfn IS NULL, {$this->video_table}.unitfn,
                                 {$this->video_table}.unitf IS NULL, {$this->video_table}.unitf,
                                 {$this->video_table}.unitn IS NULL, {$this->video_table}.unitn,
                                 {$this->video_table}.unit IS NULL, {$this->video_table}.unit,
