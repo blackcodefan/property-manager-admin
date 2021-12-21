@@ -19,7 +19,7 @@
                 <div class="label">
                     <label for="unit_floor">Unit Floor:</label>
                 </div>
-                <input type="text" name="unit_floor" required id="unit_floor" value="<?php echo $video->unitf; ?>"/>
+                <input type="text" name="unit_floor" required id="unit_floor" value="<?php echo $video->unitf.$video->unitfn; ?>"/>
             </div>
             <div class="options">
                 <div class="label">

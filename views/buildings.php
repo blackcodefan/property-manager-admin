@@ -67,8 +67,8 @@
                         echo 'Unique video first';
                     ?>
                 </td>
-                <td><?php echo (new DateTime($buildings[$i]->created_at))->format('m/d/Y h:i a'); ?> ?></td>
-                <td><?php echo (new DateTime($buildings[$i]->updated_at))->format('m/d/Y h:i a'); ?> ?></td>
+                <td><?php echo (new DateTime($buildings[$i]->created_at))->format('m/d/Y h:i a'); ?></td>
+                <td><?php echo (new DateTime($buildings[$i]->updated_at))->format('m/d/Y h:i a'); ?></td>
             </tr>
         <?php } ?>
         </tbody>

@@ -62,8 +62,8 @@
                     </div>
                 </td>
                 <td><?php echo $properties[$i]->buildings; ?></td>
-                <td><?php echo (new DateTime($properties[$i]->created_at))->format('m/d/Y h:i a'); ?> ?></td>
-                <td><?php echo (new DateTime($properties[$i]->updated_at))->format('m/d/Y h:i a'); ?> ?></td>
+                <td><?php echo (new DateTime($properties[$i]->created_at))->format('m/d/Y h:i a'); ?></td>
+                <td><?php echo (new DateTime($properties[$i]->updated_at))->format('m/d/Y h:i a'); ?></td>
             </tr>
         <?php } ?>
         </tbody>
