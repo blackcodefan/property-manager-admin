@@ -93,6 +93,9 @@ class Admin {
 
         wp_enqueue_style( 'bootstrap-css', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'jquery-ui-css', plugin_dir_url( __FILE__ ) . 'css/jquery-ui.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'jquery-ui-structure-css', plugin_dir_url( __FILE__ ) . 'css/jquery-ui.structure.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'jquery-ui-theme-css', plugin_dir_url( __FILE__ ) . 'css/jquery-ui.theme.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/property-manager-admin.css', array(), $this->version, 'all' );
 
 	}
@@ -108,6 +111,7 @@ class Admin {
 		wp_enqueue_script( 'popover', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', array( 'jquery' ), $this->version, false );
         wp_enqueue_script( 'jsmartable', plugin_dir_url( __FILE__ ) . 'js/jsmartable.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( 'jquery_ui', plugin_dir_url( __FILE__ ) . 'js/jquery-ui.js', array( 'jquery' ), $this->version, false );
         wp_enqueue_script( 'pma_js', plugin_dir_url( __FILE__ ) . 'js/property-manager-admin.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( 'pma_ajax_handle', 'params', $params );
 
@@ -160,6 +164,15 @@ class Admin {
             'read',
             'buildings',
             array( $this, 'building_list_page_content' )
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            __( 'Order Buildings', $this->plugin_text_domain ),
+            __( 'Order Buildings', $this->plugin_text_domain ),
+            'read',
+            'order-buildings',
+            array( $this, 'building_order_page_content' )
         );
 
         add_submenu_page(
@@ -239,6 +252,11 @@ class Admin {
 	    include_once('views/buildings.php');
     }
 
+    public function building_order_page_content() {
+        $buildings = $this->building_controller->index();
+	    include_once('views/order-buildings.php');
+    }
+
     public function building_create_page_content(){
         $properties = $this->property_controller->index();
 	    include_once('views/create-building.php');
@@ -256,7 +274,7 @@ class Admin {
             $status = 'trash';
         }
 
-        $orderBy = 'address';
+        $orderBy = 'description';
         $order = !empty($_GET['order']) ? 'asc' : 'desc';
         if (!empty($_GET['orderby'])) $orderBy = $_GET['orderby'];
 
@@ -396,6 +414,26 @@ class Admin {
                 'response' 	=> 403,
                 'back_link' => 'admin.php?page=' . $this->plugin_name,
 
+            ) );
+        }
+    }
+
+    public function save_buildings_order() {
+        if( isset( $_POST['property_save_nonce'] ) && wp_verify_nonce( $_POST['property_save_nonce'], 'property_save_nonce') ){
+
+            $data = json_decode(stripslashes($_POST['sort-data']));
+
+            $this->building_controller->setOrder($data);
+            $admin_notice = "success";
+            $response = "Property has been saved successfully.";
+            $redirect = "order-buildings";
+
+            $this->custom_redirect($admin_notice, $response, $redirect);
+            exit;
+        }else{
+            wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
+                'response' 	=> 403,
+                'back_link' => 'admin.php?page=' . $this->plugin_name,
             ) );
         }
     }

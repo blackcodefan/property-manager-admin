@@ -37,17 +37,6 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th data-columns="address"
-                class="
-                <?php
-                echo $this->sortable_column_class_generator('address');
-                echo $this->is_hidden('address');
-                ?>">
-                <a href="<?php echo $this->video_page_sort_url_generator('address');?>">
-                    <span>Address</span>
-                    <span class="sorting-indicator"></span>
-                </a>
-            </th>
             <th  data-columns="description"
                  class="
                  <?php
@@ -83,24 +72,37 @@
                     <span class="sorting-indicator"></span>
                 </a>
             </th>
-            <th data-breakpoint="lg" class="<?php echo $this->is_hidden('label'); ?>">Label</th>
-            <th data-breakpoint="lg">Unit Floor</th>
-            <th data-breakpoint="lg">Unit</th>
+            <th>Unit Floor</th>
+            <th>Unit</th>
+
+            <th data-columns="type"
+                class="<?php echo $this->is_hidden('type');?>">
+                Type</th>
+            <th data-columns="min"
+                class="<?php echo $this->is_hidden('min');?>">
+                Line Start</th>
+            <th data-columns="max"
+                class="<?php echo $this->is_hidden('max');?>">
+                Line End
+            </th>
+            <th data-columns="address" data-breakpoint="lg"
+                class="
+                <?php
+                echo $this->sortable_column_class_generator('address');
+                echo $this->is_hidden('address');
+                ?>">
+                <a href="<?php echo $this->video_page_sort_url_generator('address');?>">
+                    <span>Address</span>
+                    <span class="sorting-indicator"></span>
+                </a>
+            </th>
             <th data-columns="bedroom"
                 class="<?php echo $this->is_hidden('bedroom'); ?>"
                 data-breakpoint="lg">Bedroom</th>
             <th data-columns="bathroom"
                 class="<?php echo $this->is_hidden('bathroom');?>"
                 data-breakpoint="lg">Bathroom</th>
-            <th data-columns="type"
-                class="<?php echo $this->is_hidden('type');?>"
-                data-breakpoint="lg">Type</th>
-            <th data-columns="min"
-                class="<?php echo $this->is_hidden('min');?>"
-                data-breakpoint="lg">Line Start</th>
-            <th data-columns="max"
-                class="<?php echo $this->is_hidden('max');?>"
-                data-breakpoint="lg">Line End</th>
+            <th data-breakpoint="lg" class="<?php echo $this->is_hidden('label'); ?>">Label</th>
             <th data-columns="youtube" class="video" data-breakpoint="xlg">Youtube</th>
             <th data-columns="vimeo" class="video" data-breakpoint="xlg">Vimeo</th>
             <th data-columns="wistia" class="video" data-breakpoint="xlg">Wistia</th>
@@ -113,7 +115,6 @@
             <tr class="<?php if ($i % 2 != 0) echo "alternate"; ?>"
                 data-score="<?php echo $videos[$i]->id; ?>">
                 <td><?php echo $videos[$i]->id; ?></td>
-                <td class="<?php echo $this->is_hidden('address');?>"><?php echo $videos[$i]->address; ?></td>
                 <td class="<?php echo $this->is_hidden('description');?>">
                     <?php echo $videos[$i]->description; ?>
                     <div class="row-actions">
@@ -140,7 +141,6 @@
                 </td>
                 <td class="<?php echo $this->is_hidden('building');?>"><?php echo $videos[$i]->building_name; ?></td>
                 <td class="<?php echo $this->is_hidden('property');?>"><?php echo $videos[$i]->property_name; ?></td>
-                <td class="<?php echo $this->is_hidden('label');?>"><?php echo $videos[$i]->label; ?></td>
                 <td>
                     <?php
                     if (!empty($videos[$i]->unitf)) echo $videos[$i]->unitf;
@@ -153,13 +153,15 @@
                     if (!empty($videos[$i]->unitn)) echo $videos[$i] -> unitn;
                     ?>
                 </td>
-                <td class="<?php echo $this->is_hidden('bedroom');?>"><?php echo $videos[$i]->bedroom; ?></td>
-                <td class="<?php echo $this->is_hidden('bathroom');?>"><?php echo $videos[$i]->bathroom; ?></td>
                 <td class="<?php echo $this->is_hidden('type');?>">
                     <?php if ($videos[$i]->apartrange) echo 'Line'; else echo 'Unique'; ?>
                 </td>
                 <td class="<?php echo $this->is_hidden('min');?>"><?php echo $videos[$i]->apartmin; ?></td>
                 <td class="<?php echo $this->is_hidden('max');?>"><?php echo $videos[$i]->apartmax; ?></td>
+                <td class="<?php echo $this->is_hidden('address');?>"><?php echo $videos[$i]->address; ?></td>
+                <td class="<?php echo $this->is_hidden('bedroom');?>"><?php echo $videos[$i]->bedroom; ?></td>
+                <td class="<?php echo $this->is_hidden('bathroom');?>"><?php echo $videos[$i]->bathroom; ?></td>
+                <td class="<?php echo $this->is_hidden('label');?>"><?php echo $videos[$i]->label; ?></td>
                 <td class="video">
                     <a target="_blank" href="<?php echo $videos[$i]->youtube; ?>">
                         <?php echo $videos[$i]->youtube; ?>

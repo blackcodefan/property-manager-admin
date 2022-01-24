@@ -72,6 +72,19 @@ jQuery(function () {
             alert('Unit Floor should be only numeric or alphabetical characters');
         }
     });
+
+    jQuery('.sortable').sortable({
+        cursor: "move"
+    });
+
+    jQuery('#building-order-form').on("submit", function (event) {
+        let data = [];
+        jQuery(this).children('.sortable').children('li').each(function (index) {
+            const id = parseInt(jQuery(this).attr('data-score'));
+            data.push({id: id, order: index});
+        });
+        jQuery('#sort-data').val(JSON.stringify(data));
+    })
 });
 
 function trashProperty(property_id) {

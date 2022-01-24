@@ -35,6 +35,7 @@ class Activator
                           name varchar (255),
                           address varchar (255),
                           listing_order BOOL default 0,
+                          sort int default 0,
                           created_at TIMESTAMP default current_timestamp,
                           updated_at TIMESTAMP default current_timestamp
                           ) $collate;";

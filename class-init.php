@@ -90,6 +90,8 @@ class Init {
 
         $this->loader->add_action( 'admin_post_save_property_hook', $plugin_admin, 'save_property');
 
+        $this->loader->add_action( 'admin_post_save_building_order_hook', $plugin_admin, 'save_buildings_order');
+
         $this->loader->add_action( 'admin_post_save_building_hook', $plugin_admin, 'save_building');
 
         $this->loader->add_action( 'admin_post_save_video_hook', $plugin_admin, 'save_video');

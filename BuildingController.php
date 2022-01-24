@@ -36,7 +36,8 @@ class BuildingController
                        LEFT JOIN {$this->property_table} 
                        ON {$this->table}.property_id={$this->property_table}.id
                        {$where_clause}
-                       GROUP BY {$this->table}.id;",
+                       GROUP BY {$this->table}.id
+                       ORDER BY {$this->table}.sort;",
                 $this->current_user->ID)
         );
 
@@ -59,6 +60,23 @@ class BuildingController
             $building['updated_at'] = date('Y-m-d h-i-s');
             return $this->db->update($this->table, $building, ['id' => $building_id]);
         }
+
+    }
+
+    public function setOrder($data) {
+        $VALUE = "";
+
+        for ($i =0; $i < count($data); $i++) {
+            $row = $data[$i];
+            if ($i == count($data) - 1){
+                $VALUE .= "({$row->id}, {$row->order})";
+            }else {
+                $VALUE .= "({$row->id}, {$row->order}), ";
+            }
+        }
+
+        $query = "INSERT INTO {$this->table} (id, sort) VALUES {$VALUE} ON DUPLICATE KEY UPDATE sort = VALUES(sort);";
+        return $this->db->get_results($this->db->prepare($query));
 
     }
 }
