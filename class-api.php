@@ -51,13 +51,39 @@ class Api
                            LEFT JOIN {$this->building_table}
                            ON {$this->video_table}.building_id={$this->building_table}.id
                            WHERE {$this->video_table}.user_id=%d
+                           AND {$this->property_table}.status='publish'
+                           AND {$this->building_table}.status='publish'
                            AND {$this->video_table}.status='publish'
                            ORDER BY
                                 {$this->building_table}.sort,
-                                {$this->video_table}.unitn IS NULL, {$this->video_table}.unitn,
-                                {$this->video_table}.unit IS NULL, {$this->video_table}.unit,
-                                {$this->video_table}.unitfn IS NULL, {$this->video_table}.unitfn,
-                                {$this->video_table}.unitf IS NULL, {$this->video_table}.unitf,
+                                (CASE 
+                                     WHEN {$this->video_table}.apartrange = 1 AND {$this->video_table}.unitn IS NULL
+                                         THEN {$this->video_table}.unitn IS NULL
+                                     WHEN {$this->video_table}.apartrange = 1 AND {$this->video_table}.unitn IS NOT NULL
+                                         THEN {$this->video_table}.unitn
+                                END),
+                                (CASE 
+                                     WHEN {$this->video_table}.apartrange = 1 AND {$this->video_table}.unit IS NULL
+                                         THEN {$this->video_table}.unit IS NULL
+                                     WHEN {$this->video_table}.apartrange = 1 AND {$this->video_table}.unit IS NOT NULL
+                                         THEN {$this->video_table}.unit
+                                END),
+                                {$this->video_table}.unitfn IS NULL,
+                                {$this->video_table}.unitfn,
+                                {$this->video_table}.unitf IS NULL,
+                                {$this->video_table}.unitf,
+                                (CASE 
+                                     WHEN {$this->video_table}.apartrange = 0 AND {$this->video_table}.unitn IS NULL
+                                         THEN {$this->video_table}.unitn IS NULL
+                                     WHEN {$this->video_table}.apartrange = 0 AND {$this->video_table}.unitn IS NOT NULL
+                                         THEN {$this->video_table}.unitn
+                                END),
+                                (CASE 
+                                     WHEN {$this->video_table}.apartrange = 0 AND {$this->video_table}.unit IS NULL
+                                         THEN {$this->video_table}.unit IS NULL
+                                     WHEN {$this->video_table}.apartrange = 0 AND {$this->video_table}.unit IS NOT NULL
+                                         THEN {$this->video_table}.unit
+                                END),
                                 {$this->video_table}.apartmin,
                                 {$this->video_table}.apartmax,
                                 {$this->video_table}.label

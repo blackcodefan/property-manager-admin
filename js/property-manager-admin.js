@@ -210,3 +210,35 @@ function restoreVideo(video_id) {
             );
         });
 }
+
+function deleteBuilding(id) {
+    const response = confirm('Are you sure? Your building will be deleted permanently.');
+    if (!response) return;
+    let ajax_request_nonce = jQuery('#ajax_request_nonce').val();
+    jQuery.ajax({
+        url:    params.ajaxurl,
+        type:   'POST',
+        data:   {
+            ajax_request_nonce: ajax_request_nonce,
+            id: id,
+            action: 'delete_building_handler'
+        }
+    })
+        .done( function( response ) {
+            if (JSON.parse(response)['success']){
+                jQuery('#ajax-feed').html(
+                    '<div class="notice notice-success is-dismissible"><p><strong>Video has been saved successfully.</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>'
+                );
+                jQuery(`tr[data-score="${id}"]`).remove();
+            }else{
+                jQuery('#ajax-feed').html(
+                    '<div class="notice notice-error is-dismissible"><p><strong>Woops! There was an issue handling your request.</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>'
+                );
+            }
+        })
+        .fail( function() {
+            jQuery('#ajax-feed').html(
+                '<div class="notice notice-error is-dismissible"><p><strong>Woops! There was an issue handling your request.</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>'
+            );
+        });
+}

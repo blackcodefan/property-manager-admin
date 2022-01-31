@@ -21,7 +21,7 @@ class Activator
                           id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,PRIMARY KEY  (id),
                           name varchar(255),
                           user_id int ,
-                          status varchar (255) default 'publish',
+                          status varchar (255) default 'draft',
                           created_at TIMESTAMP default current_timestamp,
                           updated_at TIMESTAMP default current_timestamp
                           ) $collate;";
@@ -36,6 +36,7 @@ class Activator
                           address varchar (255),
                           listing_order BOOL default 0,
                           sort int default 0,
+                          status varchar (255) default 'draft',
                           created_at TIMESTAMP default current_timestamp,
                           updated_at TIMESTAMP default current_timestamp
                           ) $collate;";

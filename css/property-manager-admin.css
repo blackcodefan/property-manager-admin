@@ -43,3 +43,8 @@
     margin-left: -1.3em;
     top: 20px;
 }
+
+.sortable .property-name {
+    font-size: 15px;
+    color: #00a0d2;
+}

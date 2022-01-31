@@ -25,8 +25,14 @@
     </form>
 
 <!--    Info bar-->
+    <a href="<?php echo esc_url(admin_url('admin.php?page=videos&status=all')); ?>">
+        All (<?php echo $all[0]->counts; ?>)
+    </a> |
     <a href="<?php echo esc_url(admin_url('admin.php?page=videos&status=publish')); ?>">
         Active (<?php echo $active[0]->counts; ?>)
+    </a> |
+    <a href="<?php echo esc_url(admin_url('admin.php?page=videos&status=draft')); ?>">
+        Draft(<?php echo $draft[0]->counts; ?>)
     </a> |
     <a href="<?php echo esc_url(admin_url('admin.php?page=videos&status=trash')); ?>">
         Trashed (<?php echo $trashed[0]->counts; ?>)
@@ -61,6 +67,7 @@
                 </a>
             </th>
             <th data-columns="property"
+                style="min-width: 150px"
                 class="
                 <?php
                 echo $this->sortable_column_class_generator('property');
@@ -86,6 +93,7 @@
                 Line End
             </th>
             <th data-columns="address" data-breakpoint="lg"
+                style="min-width: 150px"
                 class="
                 <?php
                 echo $this->sortable_column_class_generator('address');
@@ -122,7 +130,7 @@
                             <a href="<?php echo esc_url(admin_url('admin.php?page=edit-video&id=' . $videos[$i]->id)); ?>">
                                 Edit</a> |
                         </span>
-                        <?php if ($videos[$i]->status == 'publish') { ?>
+                        <?php if ($videos[$i]->status != 'trash') { ?>
                             <span>
                                 <a href="javascript:void(0);"
                                    onclick="trashVideo(<?php echo $videos[$i]->id; ?>)">
@@ -139,8 +147,12 @@
                         <?php } ?>
                     </div>
                 </td>
-                <td class="<?php echo $this->is_hidden('building');?>"><?php echo $videos[$i]->building_name; ?></td>
-                <td class="<?php echo $this->is_hidden('property');?>"><?php echo $videos[$i]->property_name; ?></td>
+                <td class="<?php echo $this->is_hidden('building');?>">
+                    <?php if (empty($videos[$i]->building_name)) echo 'Unassigned'; else echo $videos[$i]->building_name; ?>
+                </td>
+                <td class="<?php echo $this->is_hidden('property');?>">
+                    <?php if (empty($videos[$i]->property_name)) echo 'Unassigned'; else echo $videos[$i]->property_name; ?>
+                </td>
                 <td>
                     <?php
                     if (!empty($videos[$i]->unitf)) echo $videos[$i]->unitf;
@@ -158,7 +170,9 @@
                 </td>
                 <td class="<?php echo $this->is_hidden('min');?>"><?php echo $videos[$i]->apartmin; ?></td>
                 <td class="<?php echo $this->is_hidden('max');?>"><?php echo $videos[$i]->apartmax; ?></td>
-                <td class="<?php echo $this->is_hidden('address');?>"><?php echo $videos[$i]->address; ?></td>
+                <td class="<?php echo $this->is_hidden('address');?>">
+                    <?php if (empty($videos[$i]->address)) echo '-'; else echo $videos[$i]->address; ?>
+                </td>
                 <td class="<?php echo $this->is_hidden('bedroom');?>"><?php echo $videos[$i]->bedroom; ?></td>
                 <td class="<?php echo $this->is_hidden('bathroom');?>"><?php echo $videos[$i]->bathroom; ?></td>
                 <td class="<?php echo $this->is_hidden('label');?>"><?php echo $videos[$i]->label; ?></td>

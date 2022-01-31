@@ -105,6 +105,8 @@ class Init {
 
         $this->loader->add_action( 'wp_ajax_video_request_handler', $plugin_admin, 'video_ajax_handler');
 
+        $this->loader->add_action( 'wp_ajax_delete_building_handler', $plugin_admin, 'delete_building');
+
         // Register admin notices
         $this->loader->add_action( 'admin_notices', $plugin_admin, 'print_plugin_admin_notices');
 

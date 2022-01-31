@@ -46,6 +46,17 @@
                 </label>
             </fieldset>
         </div>
+        <div class="options">
+            <div class="label">
+                <label for="status">Status</label>
+            </div>
+            <select name="status" id="status" required>
+                <option value="">Select a status</option>
+                <option value="draft" <?php if ($building->status == 'draft') echo 'selected';?>>Draft</option>
+                <option value="publish" <?php if ($building->status == 'publish') echo 'selected';?>>Publish</option>
+                <option value="trash" <?php if ($building->status == 'trash') echo 'selected';?>>Trash</option>
+            </select>
+        </div>
         <?php
         wp_nonce_field( 'building_save_nonce', 'building_save_nonce' );
         submit_button('Save');

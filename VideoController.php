@@ -27,7 +27,10 @@ class VideoController
      */
     public function index(...$args){
 
-        $where_clause = " WHERE {$this->table}.user_id=%d AND {$this->table}.status='{$args[0]}'";
+        $where_clause = " WHERE {$this->table}.user_id=%d";
+        if ($args[0] != 'all') {
+            $where_clause .= " AND {$this->table}.status='{$args[0]}'";
+        }
         if (isset($_GET['building_id']) && $_GET['building_id'] != ''){
             $where_clause .= " AND {$this->table}.building_id={$_GET['building_id']}";
         }
@@ -77,13 +80,16 @@ class VideoController
         return $this->db->update($this->table, ['status' => $status, 'updated_at' => date('Y-m-d h-i-s')], ['id' => $id]);
     }
 
-    public function count($status){
+    public function count($status = 'all'){
+        $where_clause = " WHERE user_id=%d";
+        if ($status != 'all') {
+            $where_clause .= " AND status='{$status}'";
+        }
         return $this->db->get_results(
             $this->db->prepare(
                 "SELECT COUNT('id') as counts
                       FROM  {$this->table}
-                      WHERE user_id=%d
-                      AND status='{$status}';",
+                      {$where_clause};",
                 $this->current_user->ID)
         );
     }

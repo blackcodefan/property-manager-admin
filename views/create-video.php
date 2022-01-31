@@ -103,6 +103,17 @@
             </div>
             <input type="text" name="wistia" id="wistia"/>
         </div>
+        <div class="options">
+            <div class="label">
+                <label for="status">Status</label>
+            </div>
+            <select name="status" id="status" required>
+                <option value="">Select a status</option>
+                <option value="draft">Draft</option>
+                <option value="publish">Publish</option>
+                <option value="trash">Trash</option>
+            </select>
+        </div>
         <?php
         wp_nonce_field('video_save_nonce', 'video_save_nonce');
         submit_button('Add a Video');

@@ -190,7 +190,7 @@ class Admin {
             __( 'Edit Building', $this->plugin_text_domain ),
             'read',
             'edit-building',
-            array( $this, 'building_edit_page_content' )
+            array( $this, 'building_edit_page_content')
         );
 
         $this->videos_page_id = add_submenu_page(
@@ -227,13 +227,15 @@ class Admin {
 
 	public function property_list_page_content() {
 	    $status = 'publish';
-	    if (isset($_GET['status']) && $_GET['status'] == 'trash'){
-	        $status = 'trash';
+	    if (isset($_GET['status'])){
+	        $status = $_GET['status'];
         }
 
 	    $properties = $this->property_controller->index($status);
+	    $all = $this->property_controller->count();
 	    $trashed = $this->property_controller->count('trash');
 	    $active = $this->property_controller->count('publish');
+	    $draft = $this->property_controller->count('draft');
 		include_once( 'views/properties.php' );
 	}
 
@@ -247,53 +249,64 @@ class Admin {
     }
 
     public function building_list_page_content(){
-	    $buildings = $this->building_controller->index();
-        $properties = $this->property_controller->index();
+        $status = 'publish';
+        if (isset($_GET['status'])){
+            $status = $_GET['status'];
+        }
+        $all = $this->building_controller->count();
+        $trashed = $this->building_controller->count('trash');
+        $active = $this->building_controller->count('publish');
+        $draft = $this->building_controller->count('draft');
+
+	    $buildings = $this->building_controller->index($status);
+        $properties = $this->property_controller->index('publish');
 	    include_once('views/buildings.php');
     }
 
     public function building_order_page_content() {
-        $buildings = $this->building_controller->index();
+        $buildings = $this->building_controller->getOrderedBuildings();
 	    include_once('views/order-buildings.php');
     }
 
     public function building_create_page_content(){
-        $properties = $this->property_controller->index();
+        $properties = $this->property_controller->index('publish');
 	    include_once('views/create-building.php');
     }
 
     public function building_edit_page_content(){
-        $properties = $this->property_controller->index();
+        $properties = $this->property_controller->index('publish');
         $building = $this->building_controller->get($_GET['id']);
 	    include_once('views/edit-building.php');
     }
 
     public function video_list_page_content(){
         $status = 'publish';
-        if (isset($_GET['status']) && $_GET['status'] == 'trash'){
-            $status = 'trash';
+        if (isset($_GET['status'])){
+            $status = $_GET['status'];
         }
 
         $orderBy = 'description';
         $order = !empty($_GET['order']) ? 'asc' : 'desc';
         if (!empty($_GET['orderby'])) $orderBy = $_GET['orderby'];
 
+        $all = $this->video_controller->count();
         $trashed = $this->video_controller->count('trash');
         $active = $this->video_controller->count('publish');
+        $draft = $this->video_controller->count('draft');
 
 	    $videos = $this->video_controller->index($status, $orderBy, $order);
-        $buildings = $this->building_controller->index();
+        $buildings = $this->building_controller->index('publish');
 
 	    include_once('views/videos.php');
     }
 
     public function video_create_page_content(){
-	    $buildings = $this->building_controller->index();
+	    $buildings = $this->building_controller->index('publish');
 	    include_once('views/create-video.php');
     }
 
     public function video_edit_page_content(){
-        $buildings = $this->building_controller->index();
+        $buildings = $this->building_controller->index('publish');
 	    $video = $this->video_controller->get($_GET['id']);
 	    include_once('views/edit-video.php');
     }
@@ -397,7 +410,8 @@ class Admin {
         if( isset( $_POST['property_save_nonce'] ) && wp_verify_nonce( $_POST['property_save_nonce'], 'property_save_nonce') ){
             $property_name = sanitize_text_field($_POST['name']);
             $property_id = sanitize_text_field($_POST['property_id']);
-            if ($this->property_controller->save($property_name, $property_id)){
+            $status = sanitize_text_field($_POST['status']);
+            if ($this->property_controller->save($property_name, $status, $property_id)){
                 $admin_notice = "success";
                 $response = "Property has been saved successfully.";
                 $redirect = $this->plugin_name;
@@ -446,6 +460,7 @@ class Admin {
             $building['name'] = sanitize_text_field($_POST['name']);
             $building['address'] = sanitize_text_field($_POST['address']);
             $building['listing_order'] = $_POST['listing_order'] == 'true' ? 1 : 0; // true if line video first
+            $building['status'] = sanitize_text_field($_POST['status']);
             $building_id = sanitize_text_field($_POST['building_id']);
 
             if ($this->building_controller->save($building, $building_id)){
@@ -469,6 +484,25 @@ class Admin {
         }
     }
 
+    public function delete_building(){
+        if( isset( $_POST['ajax_request_nonce'] ) && wp_verify_nonce( $_POST['ajax_request_nonce'], 'ajax_request_nonce') ) {
+            $id = sanitize_text_field($_POST['id']);
+            if ($this->building_controller->destroy($id)){
+                echo json_encode(['success' => true]);
+            }else{
+                echo json_encode(['success' => false]);
+            }
+            wp_die();
+        }
+        else {
+            wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
+                'response' 	=> 403,
+                'back_link' => 'admin.php?page=' . $this->plugin_name,
+
+            ) );
+        }
+    }
+
     public function save_video(){
         if( isset( $_POST['video_save_nonce'] ) && wp_verify_nonce( $_POST['video_save_nonce'], 'video_save_nonce') ){
 
@@ -483,8 +517,12 @@ class Admin {
             $video['apartrange'] = $_POST['apartment-type-radio'] == 'true'?1:0;
             $video['apartmin'] = $_POST['min'];
             $video['apartmax'] = $_POST['max'];
-            $video['status'] = 'publish';
+            $video['status'] = 'draft';
             $video['label'] = $_POST['label'];
+
+            if (isset($_POST['status'])){
+                $video['status'] = $_POST['status'];
+            }
 
             if (is_numeric($_POST['unit_floor'])){
                 $video['unitfn'] = $_POST['unit_floor'];
@@ -593,8 +631,8 @@ class Admin {
         if (!empty($_GET['orderby'])) $orderBy = $_GET['orderby'];
 
         $status_clause = "";
-        if (!empty($_GET['status']) && $_GET['status'] == 'trash'){
-            $status_clause .= "&status=trash";
+        if (!empty($_GET['status'])){
+            $status_clause .= "&status={$_GET['status']}";
         }
 
         return esc_url(

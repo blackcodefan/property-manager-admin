@@ -19,8 +19,10 @@ class PropertyController
         $this->building_table = $wpdb->prefix.'buildings';
     }
 
-    public function index($status = 'publish'){
-        $where_clause = " WHERE {$this->table}.status='{$status}' AND {$this->table}.user_id=%d";
+    public function index($status = 'all'){
+        $where_clause = " WHERE {$this->table}.user_id=%d";
+        if ($status != 'all')
+            $where_clause .= " AND {$this->table}.status='{$status}'";
         $results = $this->db->get_results(
             $this->db->prepare(
                 "SELECT {$this->table}.*,
@@ -47,29 +49,35 @@ class PropertyController
         return $this->db->update($this->table, ['status' => $status, 'updated_at' => date('Y-m-d h-i-s')], ['id' => $id]);
     }
 
-    public function count($status){
+    public function count($status = 'all'){
+        $where_clause = " WHERE user_id=%d";
+        if ($status != 'all') {
+            $where_clause .= " AND status='{$status}'";
+        }
         return $this->db->get_results(
             $this->db->prepare(
                 "SELECT COUNT('id') as counts 
                       FROM  {$this->table}
-                      WHERE user_id=%d
-                      AND status='{$status}';", 
+                      {$where_clause}
+                ;",
                 $this->current_user->ID)
         );
     }
 
-    public function save($property_name, $property_id = null){
+    public function save($property_name, $status, $property_id = null){
         if ($property_id == null)
             return $this->db->insert($this->table,
                 [
                     'name' => $property_name,
-                    'user_id' => $this->current_user->ID
+                    'user_id' => $this->current_user->ID,
+                    'status' => $status
                 ]
             );
         else{
             return $this->db->update($this->table, 
                 [
-                    'name' => $property_name, 
+                    'name' => $property_name,
+                    'status' => $status,
                     'updated_at' => date('Y-m-d h-i-s')
                 ], 
                 [
