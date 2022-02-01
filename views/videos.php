@@ -25,16 +25,19 @@
     </form>
 
 <!--    Info bar-->
-    <a href="<?php echo esc_url(admin_url('admin.php?page=videos&status=all')); ?>">
-        All (<?php echo $all[0]->counts; ?>)
-    </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=videos&status=publish')); ?>">
+    <a
+        <?php if (empty($_GET['status']) || $_GET['status'] == 'publish') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=videos&status=publish')); ?>">
         Active (<?php echo $active[0]->counts; ?>)
     </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=videos&status=draft')); ?>">
+    <a
+        <?php if (!empty($_GET['status']) && $_GET['status'] == 'draft') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=videos&status=draft')); ?>">
         Draft(<?php echo $draft[0]->counts; ?>)
     </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=videos&status=trash')); ?>">
+    <a
+        <?php if (!empty($_GET['status']) && $_GET['status'] == 'trash') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=videos&status=trash')); ?>">
         Trashed (<?php echo $trashed[0]->counts; ?>)
     </a>
 
@@ -86,9 +89,11 @@
                 class="<?php echo $this->is_hidden('type');?>">
                 Type</th>
             <th data-columns="min"
+                data-breakpoint="xs"
                 class="<?php echo $this->is_hidden('min');?>">
                 Line Start</th>
             <th data-columns="max"
+                data-breakpoint="xs"
                 class="<?php echo $this->is_hidden('max');?>">
                 Line End
             </th>
@@ -106,14 +111,16 @@
             </th>
             <th data-columns="bedroom"
                 class="<?php echo $this->is_hidden('bedroom'); ?>"
-                data-breakpoint="lg">Bedroom</th>
+            >Bedroom</th>
             <th data-columns="bathroom"
                 class="<?php echo $this->is_hidden('bathroom');?>"
-                data-breakpoint="lg">Bathroom</th>
+            >Bathroom</th>
             <th data-breakpoint="lg" class="<?php echo $this->is_hidden('label'); ?>">Label</th>
             <th data-columns="youtube" class="video" data-breakpoint="xlg">Youtube</th>
             <th data-columns="vimeo" class="video" data-breakpoint="xlg">Vimeo</th>
             <th data-columns="wistia" class="video" data-breakpoint="xlg">Wistia</th>
+            <th data-columns="min2" data-breakpoint="xlg">Second Line Start</th>
+            <th data-columns="max2" data-breakpoint="xlg">Second Line End</th>
             <th data-columns="created_at" data-breakpoint="xlg">Create At</th>
             <th data-columns="updated_at" data-breakpoint="xlg">Update At</th>
         </tr>
@@ -191,6 +198,8 @@
                         <?php echo $videos[$i]->wistia; ?>
                     </a>
                 </td>
+                <td><?php echo $videos[$i]->apartmin2; ?></td>
+                <td><?php echo $videos[$i]->apartmax2; ?></td>
                 <td><?php echo (new DateTime($videos[$i]->created_at))->format('m/d/Y h:i a'); ?></td>
                 <td><?php echo (new DateTime($videos[$i]->updated_at))->format('m/d/Y h:i a'); ?></td>
             </tr>

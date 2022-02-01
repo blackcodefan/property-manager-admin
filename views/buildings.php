@@ -22,16 +22,19 @@
     </form>
     <?php wp_nonce_field('ajax_request_nonce', 'ajax_request_nonce'); ?>
     <!--    Info bar-->
-    <a href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=all')); ?>">
-        All (<?php echo $all[0]->counts; ?>)
-    </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=publish')); ?>">
+    <a
+        <?php if (empty($_GET['status']) || $_GET['status'] == 'publish') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=publish')); ?>">
         Active (<?php echo $active[0]->counts; ?>)
     </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=draft')); ?>">
+    <a
+        <?php if (!empty($_GET['status']) && $_GET['status'] == 'draft') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=draft')); ?>">
         Draft(<?php echo $draft[0]->counts; ?>)
     </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=trash')); ?>">
+    <a
+        <?php if (!empty($_GET['status']) && $_GET['status'] == 'trash') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=trash')); ?>">
         Trashed (<?php echo $trashed[0]->counts; ?>)
     </a>
     <table class="widefat fixed" cellspacing="0">

@@ -83,6 +83,15 @@
                 <input type="number" name="min" required id="min" value="<?php echo $video->apartmin; ?>"/>
                 <input type="number" name="max" required id="max" value="<?php echo $video->apartmax; ?>"/>
             </div>
+            <?php if (!empty($video->apartmin2)) {?>
+                <div class="options range">
+                    <div class="label">
+                        <label for="min">Enter Second Range (optional):</label>
+                    </div>
+                    <input type="number" name="min2" value="<?php echo $video->apartmin2; ?>"/>
+                    <input type="number" name="max2" value="<?php echo $video->apartmax2; ?>"/>
+                </div>
+            <?php } ?>
         <?php } ?>
         <div class="options">
             <div class="label">

@@ -6,11 +6,16 @@ jQuery(function () {
            if((jQuery(".range")).length === 0){
                jQuery("#radio-box").after(
                    "<div class=\"options range\">\n" +
-                   "    <p><label for=\"min\">Enter Range:</label></p>\n" +
+                   "    <div><label for=\"min\">Enter Range:</label></div>\n" +
                    "    <input type=\"number\" name=\"min\" required id=\"min\"/>\n" +
                    "    <input type=\"number\" name=\"max\" required id=\"max\"/>\n" +
+                   "</div>" +
+                   "<div class=\"options range\">\n" +
+                   "    <div><label>Enter Second Range (optional):</label></div>\n" +
+                   "    <input type=\"number\" name=\"min2\"/>\n" +
+                   "    <input type=\"number\" name=\"max2\"/>\n" +
                    "</div>"
-               )
+               );
            }
        }else{
            jQuery(".range").remove();
@@ -24,6 +29,9 @@ jQuery(function () {
         let wistia = jQuery("#wistia").val();
         let unit = jQuery('#unit').val();
         let unitf = jQuery('#unit_floor').val();
+        let max2 = jQuery('input[name="max2"]').val();
+        let min2 = jQuery('input[name="min2"]').val();
+
         if(!unitf.match(/^[A-Za-z]+$/) && !unitf.match(/^[0-9]+$/)){
             event.preventDefault();
             return alert('Unit Floor should be only numeric or alphabetical characters');
@@ -48,6 +56,10 @@ jQuery(function () {
         if (wistia && !/^https:\/\/fast\.wistia\.net\/embed\/iframe\/\S*$/.test(wistia)){
             event.preventDefault();
             return alert("Invalid Wistia URL.");
+        }
+        if ((min2 && !max2) || (!min2 && max2)) {
+            event.preventDefault();
+            return alert("Enter both of start and end values of second ranges.");
         }
     });
 

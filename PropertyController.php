@@ -49,11 +49,9 @@ class PropertyController
         return $this->db->update($this->table, ['status' => $status, 'updated_at' => date('Y-m-d h-i-s')], ['id' => $id]);
     }
 
-    public function count($status = 'all'){
-        $where_clause = " WHERE user_id=%d";
-        if ($status != 'all') {
-            $where_clause .= " AND status='{$status}'";
-        }
+    public function count($status){
+        $where_clause = " WHERE user_id=%d AND status='{$status}'";
+
         return $this->db->get_results(
             $this->db->prepare(
                 "SELECT COUNT('id') as counts 

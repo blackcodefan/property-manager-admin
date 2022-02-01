@@ -2,16 +2,19 @@
     <h2><?php echo esc_html(get_admin_page_title()) ?></h2>
     <div id="ajax-feed"></div>
     <?php wp_nonce_field('ajax_request_nonce', 'ajax_request_nonce'); ?>
-    <a href="<?php echo esc_url(admin_url('admin.php?page=property-manager-admin&status=all')); ?>">
-        All (<?php echo $all[0]->counts; ?>)
-    </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=property-manager-admin&status=publish')); ?>">
+    <a
+        <?php if (empty($_GET['status']) || $_GET['status'] == 'publish') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=property-manager-admin&status=publish')); ?>">
         Active (<?php echo $active[0]->counts; ?>)
     </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=property-manager-admin&status=draft')); ?>">
+    <a
+        <?php if (!empty($_GET['status']) && $_GET['status'] == 'draft') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=property-manager-admin&status=draft')); ?>">
         Draft (<?php echo $draft[0]->counts; ?>)
     </a> |
-    <a href="<?php echo esc_url(admin_url('admin.php?page=property-manager-admin&status=trash')); ?>">
+    <a
+        <?php if (!empty($_GET['status']) && $_GET['status'] == 'trash') echo 'class="active-link"'?>
+            href="<?php echo esc_url(admin_url('admin.php?page=property-manager-admin&status=trash')); ?>">
         Trashed (<?php echo $trashed[0]->counts; ?>)
     </a>
     <table class="widefat fixed" cellspacing="0">
@@ -70,7 +73,7 @@
                     </div>
                 </td>
                 <td><?php echo $properties[$i]->buildings; ?></td>
-                <td><?php echo $properties[$i]->status?></td>
+                <td><?php echo $properties[$i]->status ?></td>
                 <td><?php echo (new DateTime($properties[$i]->created_at))->format('m/d/Y h:i a'); ?></td>
                 <td><?php echo (new DateTime($properties[$i]->updated_at))->format('m/d/Y h:i a'); ?></td>
             </tr>

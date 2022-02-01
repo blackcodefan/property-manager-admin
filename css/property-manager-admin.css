@@ -5,7 +5,9 @@
 #description{
     min-width: 350px
 }
-
+.active-link {
+    font-weight: bold;
+}
 .label{
     margin-top: 10px;
 }

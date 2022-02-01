@@ -232,7 +232,6 @@ class Admin {
         }
 
 	    $properties = $this->property_controller->index($status);
-	    $all = $this->property_controller->count();
 	    $trashed = $this->property_controller->count('trash');
 	    $active = $this->property_controller->count('publish');
 	    $draft = $this->property_controller->count('draft');
@@ -253,7 +252,6 @@ class Admin {
         if (isset($_GET['status'])){
             $status = $_GET['status'];
         }
-        $all = $this->building_controller->count();
         $trashed = $this->building_controller->count('trash');
         $active = $this->building_controller->count('publish');
         $draft = $this->building_controller->count('draft');
@@ -289,7 +287,6 @@ class Admin {
         $order = !empty($_GET['order']) ? 'asc' : 'desc';
         if (!empty($_GET['orderby'])) $orderBy = $_GET['orderby'];
 
-        $all = $this->video_controller->count();
         $trashed = $this->video_controller->count('trash');
         $active = $this->video_controller->count('publish');
         $draft = $this->video_controller->count('draft');
@@ -522,6 +519,11 @@ class Admin {
 
             if (isset($_POST['status'])){
                 $video['status'] = $_POST['status'];
+            }
+
+            if (isset($_POST['min2'])){
+                $video['apartmin2'] = $_POST['min2'];
+                $video['apartmax2'] = $_POST['max2'];
             }
 
             if (is_numeric($_POST['unit_floor'])){

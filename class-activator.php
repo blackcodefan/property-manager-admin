@@ -62,6 +62,8 @@ class Activator
                           apartrange BOOL default 0,
                           apartmin int,
                           apartmax int,
+                          apartmin2 int,
+                          apartmax2 int,
                           status varchar (255) default 'publish',
                           created_at TIMESTAMP default current_timestamp,
                           updated_at TIMESTAMP default current_timestamp
