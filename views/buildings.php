@@ -10,7 +10,15 @@
                 <select name="property_id" id="property">
                     <option value="">Select a Property</option>
                     <?php foreach ($properties as $property) { ?>
-                        <option value="<?php echo $property->id; ?>" <?php if (isset($_REQUEST['property_id']) && $_REQUEST['property_id'] == $property->id) echo "selected"; ?>><?php echo $property->name; ?></option>
+                        <option
+                                value="<?php echo $property->id; ?>"
+                            <?php
+                            if (isset($_REQUEST['property_id']) && $_REQUEST['property_id'] == $property->id)
+                                echo "selected";
+                            ?>
+                        >
+                            <?php echo $property->name; ?>
+                        </option>
                     <?php } ?>
                 </select>
                 <button type="submit" class="button button-primary">Apply</button>
@@ -23,8 +31,14 @@
     <?php wp_nonce_field('ajax_request_nonce', 'ajax_request_nonce'); ?>
     <!--    Info bar-->
     <a
-        <?php if (empty($_GET['status']) || $_GET['status'] == 'publish') echo 'class="active-link"'?>
-            href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=publish')); ?>">
+        <?php
+        if (empty($_GET['status']) || $_GET['status'] == 'publish')
+            echo 'class="active-link"';
+        ?>
+            href="<?php
+            echo esc_url(admin_url('admin.php?page=buildings&status=publish'));
+            ?>"
+    >
         Active (<?php echo $active[0]->counts; ?>)
     </a> |
     <a
@@ -33,8 +47,14 @@
         Draft(<?php echo $draft[0]->counts; ?>)
     </a> |
     <a
-        <?php if (!empty($_GET['status']) && $_GET['status'] == 'trash') echo 'class="active-link"'?>
-            href="<?php echo esc_url(admin_url('admin.php?page=buildings&status=trash')); ?>">
+        <?php
+        if (!empty($_GET['status']) && $_GET['status'] == 'trash')
+            echo 'class="active-link"';
+        ?>
+            href="<?php
+            echo esc_url(admin_url('admin.php?page=buildings&status=trash'));
+            ?>"
+    >
         Trashed (<?php echo $trashed[0]->counts; ?>)
     </a>
     <table class="widefat fixed" cellspacing="0">
@@ -74,8 +94,24 @@
                         <a href="<?php echo esc_url(admin_url('admin.php?page=videos&building_id=' . $buildings[$i]->id)); ?>"><?php echo $buildings[$i]->name; ?></a>
                     </strong>
                     <div class="row-actions">
-                        <span><a href="<?php echo esc_url(admin_url('admin.php?page=edit-building&id=' . $buildings[$i]->id)); ?>">Edit</a></span> |
-                        <span><a href="javascript:void(0);" onclick="deleteBuilding(<?php echo $buildings[$i]->id; ?>)">Delete</a></span>
+                        <span>
+                            <a
+                                    href="<?php
+                                    echo esc_url(admin_url('admin.php?page=edit-building&id=' . $buildings[$i]->id));
+                                    ?>"
+                            >
+                                Edit
+                            </a>
+                        </span> |
+                        <span>
+                            <a
+                                    href="javascript:void(0);"
+                                    onclick="deleteBuilding(<?php
+                                    echo $buildings[$i]->id;
+                                    ?>)">
+                                Delete
+                            </a>
+                        </span>
                     </div>
                 </td>
                 <td><?php echo $buildings[$i]->property_name; ?></td>
@@ -89,9 +125,15 @@
                         echo 'Unique video first';
                     ?>
                 </td>
-                <td><?php echo $buildings[$i]->status; ?></td>
-                <td><?php echo (new DateTime($buildings[$i]->created_at))->format('m/d/Y h:i a'); ?></td>
-                <td><?php echo (new DateTime($buildings[$i]->updated_at))->format('m/d/Y h:i a'); ?></td>
+                <td>
+                    <?php echo $buildings[$i]->status; ?>
+                </td>
+                <td>
+                    <?php echo (new DateTime($buildings[$i]->created_at))->format('m/d/Y h:i a'); ?>
+                </td>
+                <td>
+                    <?php echo (new DateTime($buildings[$i]->updated_at))->format('m/d/Y h:i a'); ?>
+                </td>
             </tr>
         <?php } ?>
         </tbody>
