@@ -36,10 +36,12 @@ jQuery(function () {
             event.preventDefault();
             return alert('Unit Floor should be only numeric or alphabetical characters');
         }
+
         if(!unit.match(/^[A-Za-z]+$/) && !unit.match(/^[0-9]+$/)){
             event.preventDefault();
             return alert('Unit should be only numeric or alphabetical characters');
         }
+
         if (!youtube && !vimeo && !wistia) {
             event.preventDefault();
             return alert("Enter one video url.");
@@ -53,6 +55,7 @@ jQuery(function () {
             event.preventDefault();
             return alert("Invalid Vimeo URL.")
         }
+
         if (wistia && !/^https:\/\/fast\.wistia\.net\/embed\/iframe\/\S*$/.test(wistia)){
             event.preventDefault();
             return alert("Invalid Wistia URL.");
