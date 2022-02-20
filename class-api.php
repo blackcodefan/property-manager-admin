@@ -86,6 +86,8 @@ class Api
                                 END),
                                 {$this->video_table}.apartmin,
                                 {$this->video_table}.apartmax,
+                                {$this->video_table}.apartmin2,
+                                {$this->video_table}.apartmax2,
                                 {$this->video_table}.label
                            ;",
                     $this->current_user->ID)
