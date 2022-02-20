@@ -36,7 +36,7 @@ class Api
         ));
     }
 
-    public function fetch_videos(WP_REST_Request $request){
+    public function fetch_videos($request){
         if($this->current_user->exists()) {
             $results = $this->db->get_results(
                 $this->db->prepare(
@@ -98,7 +98,7 @@ class Api
         }
     }
 
-    public function verify_credential(WP_REST_Request $request){
+    public function verify_credential($request){
         if($this->current_user->exists()) {
             return ['success' => true];
         }else{
