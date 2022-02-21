@@ -4,8 +4,8 @@
  * Description: Property tour video management tool
  * Author: MingRi Jin
  * Author URI: https://github.com/blackcodefan
- * Version: 1.0
- * Text Domain: property-manager-admin
+ * Version: 2.0
+ * Text Domain: property-manager-admin 2.0
  */
 
 namespace PROPERTY_MANAGER_ADMIN;
