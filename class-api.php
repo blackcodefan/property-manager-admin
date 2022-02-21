@@ -1,8 +1,6 @@
 <?php
 namespace PROPERTY_MANAGER_ADMIN;
 
-use WP_REST_Request;
-
 class Api
 {
     private $property_table;
